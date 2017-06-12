@@ -1,14 +1,13 @@
 package com.journaldev.spring.dao;
 
 import java.util.List;
-
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import com.journaldev.spring.model.Person;
 
 @Repository
@@ -25,8 +24,22 @@ public class PersonDAOImpl implements PersonDAO {
 	@Override
 	public void addPerson(Person p) {
 		Session session = this.sessionFactory.getCurrentSession();
-		session.persist(p);
-		logger.info("Person saved successfully, Person Details="+p);
+		
+		String sql = "select p.country from person p";
+
+		Query consulta = session.createQuery(sql);
+
+		List<String> ciudad = query.list();
+
+		for(String item : ciudad){
+			if(ciudad.equals(p.getCountry)){
+				logger.info("Error, ya existe una persona con ese pais de origen");		
+			}else{
+				session.persist(p);
+				logger.info("Person saved successfully, Person Details=" + p);
+			}
+		}
+		
 	}
 
 	@Override
